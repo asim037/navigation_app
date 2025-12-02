@@ -28,17 +28,25 @@ class _ScreenCState extends State<ScreenC> {
   @override
   void initState() {
     super.initState();
-    _phraseController.addListener(_onPhraseChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _phraseController.addListener(_onPhraseChanged);
+      }
+    });
   }
 
   void _onPhraseChanged() {
+    if (!mounted) return;
+    
     if (!_hashtagsFocusNode.hasFocus) {
       final hashtags = HashtagHelper.extractHashtags(_phraseController.text);
       final formattedHashtags = HashtagHelper.formatHashtags(hashtags);
       _hashtagsController.text = formattedHashtags;
     }
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _onSubmit() {
@@ -86,7 +94,11 @@ class _ScreenCState extends State<ScreenC> {
                   hintText: 'Enter your phrase with #hashtags',
                   controller: _phraseController,
                   maxLines: 5,
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (_) {
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  },
                   focusNode: _phraseFocusNode,
                 ),
                 SizedBox(height: 2.h),

@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_app/utils/routes/app_routes.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
+        final textTheme = Theme.of(context).textTheme;
         return MaterialApp.router(
           title: 'Navigation App',
           debugShowCheckedModeBanner: false,
@@ -33,11 +34,9 @@ class MyApp extends StatelessWidget {
               seedColor: const Color(0xFF2196F3),
               brightness: Brightness.light,
             ),
-            textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme.apply(
-                    bodyColor: Colors.black,
-                    displayColor: Colors.black,
-                  ),
+            textTheme: GoogleFonts.poppinsTextTheme(textTheme).apply(
+              bodyColor: Colors.black,
+              displayColor: Colors.black,
             ),
             useMaterial3: true,
           ),
